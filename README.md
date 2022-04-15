@@ -4,14 +4,14 @@
 * Vue documentation can be found at: [link](https://vuejs-templates.github.io/webpack/)
 
 ##### Command Record
- 
-`npm -g install npm` update the npm
-`npm install -g vue-cli` 2.x Vue CLI, for 3.x: `npm install -g @vue/cli`
-`vue init webpack chive-vue` init Vue project
-`npm install`
-`npm run dev`
 
-`npm install --save axios`
+`npm -g install npm` update the npm  
+`npm install -g vue-cli` 2.x Vue CLI, for 3.x: `npm install -g @vue/cli`  
+`vue init webpack chive-vue` init Vue project  
+`npm install`  
+`npm run dev`  
+
+`npm install --save axios`  
 
 ##### Problem and Solution
 
