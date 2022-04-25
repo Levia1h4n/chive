@@ -5,7 +5,6 @@ import config
 if __name__ == '__main__':
 
     config.init()
-    print(config.cfg)
     
     stock = '002049.SZ'
     dc = DC.data_collect(stock, '2020-03-01', '2022-03-01')

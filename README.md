@@ -13,9 +13,15 @@
 
 `npm install --save axios`  
 
-##### Problem and Solution
-
-* "Java file outside of source root intelliJ"
-  * find `pom.xml`, set project as maven project and reload project.
+### Problem and Solution
 * Vue warning and error when compiling
   * change Vetur JS formatter: prettier -> prettier-eslint
+
+* Azure VM
+  * `ping` azure server: 
+    1. vm networking
+    2. add inbound port rule
+    3. protocol -> icmp
+  * access from browser
+    1. vm networking
+    2. add inbound port rule
