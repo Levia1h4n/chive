@@ -6,7 +6,7 @@ import config
 if __name__ == '__main__':
 
     config.init()
-    
+
     # 设置tushare pro的token并获取连接
     ts.set_token(config.get('token'))
     pro = ts.pro_api()

@@ -6,7 +6,7 @@ import config
 class data_collect(object):
 
     def __init__(self, in_code, start_dt, end_dt):
-        ans = self.collectDATA(in_code, start_dt, end_dt)
+        self.collectDATA(in_code, start_dt, end_dt)
 
     def collectDATA(self, in_code, start_dt, end_dt):
         # 建立数据库连接，获取日线基础行情(开盘价，收盘价，最高价，最低价，成交量，成交额)
@@ -22,6 +22,8 @@ class data_collect(object):
         done_set = cursor.fetchall()
         if len(done_set) == 0:
             raise Exception
+
+        # 收集数据库中数据
         self.date_seq = []
         self.open_list = []
         self.close_list = []
@@ -29,6 +31,7 @@ class data_collect(object):
         self.low_list = []
         self.vol_list = []
         self.amount_list = []
+
         for i in range(len(done_set)):
             self.date_seq.append(done_set[i][0])
             self.open_list.append(float(done_set[i][2]))
@@ -39,7 +42,11 @@ class data_collect(object):
             self.amount_list.append(float(done_set[i][7]))
         cursor.close()
         db.close()
-        # 将日线行情整合为训练集(其中self.train是输入集，self.target是输出集，self.test_case是end_dt那天的单条测试输入)
+
+        # 将日线行情整合为训练集
+        # self.train 是输入集
+        # self.target 是输出集
+        # self.test_case 是 end_dt 那天的单条测试输入
         self.data_train = []
         self.data_target = []
         self.data_target_onehot = []
@@ -60,11 +67,12 @@ class data_collect(object):
             else:
                 self.data_target.append(float(0.00))
                 self.data_target_onehot.append([0, 1, 0])
+
+        self.data_train = np.array(self.data_train)
+        self.data_target = np.array(self.data_target)
         self.cnt_pos = len([x for x in self.data_target if x == 1.00])
         self.test_case = np.array([
             self.open_list[-1], self.close_list[-1], self.high_list[-1],
             self.low_list[-1], self.vol_list[-1], self.amount_list[-1]
         ])
-        self.data_train = np.array(self.data_train)
-        self.data_target = np.array(self.data_target)
-        return 1
+        return
