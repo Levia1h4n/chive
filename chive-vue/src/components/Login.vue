@@ -1,17 +1,17 @@
 <template>
   <div>
-    用户名:
+    Username:
     <input
       type="text"
       v-model="loginForm.username"
-      placeholder="请输入用户名"
+      placeholder="Please enter user name"
     />
     <br /><br />
-    密码:
+    Password:
     <input
       type="password"
       v-model="loginForm.password"
-      placeholder="请输入密码"
+      placeholder="Please enter password"
     />
     <br /><br />
     <button v-on:click="login">登录</button>

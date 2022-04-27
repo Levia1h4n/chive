@@ -4,7 +4,6 @@ import config
 
 
 class data_collect(object):
-
     def __init__(self, in_code, start_dt, end_dt):
         self.collectDATA(in_code, start_dt, end_dt)
 
