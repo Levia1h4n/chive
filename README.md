@@ -25,3 +25,5 @@
   * access from browser
     1. vm networking
     2. add inbound port rule
+
+### Web
