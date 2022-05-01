@@ -19,7 +19,7 @@ if __name__ == '__main__':
     db = pymysql.connect(host='127.0.0.1',
                          user=config.get('db_user'),
                          passwd=config.get('db_passwd'),
-                         db='exercise',
+                         db=config.get('db'),
                          charset='utf8')
     cursor = db.cursor()
 
