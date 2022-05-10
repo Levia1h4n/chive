@@ -1,19 +1,40 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
+import Router from 'vue-router'
+
+Vue.use(Router)
+
 // 设置反向代理，前端请求默认发送到 http://localhost:4321/api
-var axios = require('axios')
-axios.defaults.baseURL = 'http://localhost:4321/api'
+// var axios = require('axios')
+
+axios.defaults.baseURL = 'http://localhost:5000/'
 // 全局注册，之后可在其他组件中通过 this.$axios 发送数据
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-})
+
+const app = new Vue({
+  router: router,
+  render: h => h(App),
+  methods: {
+    getApp () {
+      return this.$children[0]
+    }
+  }
+}).$mount('#app')
+window.g_app = app.getApp()
+
+// new Vue({
+//   el: '#app',
+//   router,
+//   components: { App },
+//   template: '<App/>',
+//   methods: {
+//     getApp () {
+//       return this.$children[0]
+//     }
+//   }
+// })

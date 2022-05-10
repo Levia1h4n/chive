@@ -1,4 +1,5 @@
 from flask import Flask, request, Response
+from flask_cors import CORS
 import pymysql
 import json
 import config
@@ -12,6 +13,18 @@ app = Flask(__name__)
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
+
+
+@app.route("/test/get")
+def testGet():
+    a = request.args.get('arg')
+    print(a)
+    if a == '1':
+        ret = json.dumps({'msg': 'test data', 'data': [1, 2, 3, 4]})
+    else:
+        ret = json.dumps({'msg': 'test data', 'data': [4, 3, 2, 1]})
+    # response.setHeader("Access-Control-Allow-Origin", "*")
+    return Response(response=ret, status=200, mimetype='application/json')
 
 
 @app.route("/data")
@@ -64,6 +77,29 @@ def get_stock_data():
 #         print(request.args.get('name'))
 #         print(request.args.get('ok'))
 #     return "<p>Hello, World!</p>"
+
+# CORS(app, supports_credentials=True)
+CORS(app, resources=r'/*')
+
+# @app.after_request
+# def cors(environ):
+#     environ.headers['Access-Control-Allow-Origin'] = '*'
+#     environ.headers['Access-Control-Allow-Method'] = '*'
+#     environ.headers[
+#         'Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+#     return environ
+
+
+def after_request(resp:Response)->Response:
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Method'] = '*'
+    resp.headers[
+        'Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+    return resp
+
+
+# app.after_request(after_request)
+# app.before_request(after_request)
 
 if __name__ == '__main__':
 
