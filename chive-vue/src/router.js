@@ -5,6 +5,7 @@ import Admin from './components/Admin'
 import TestAdmin from './components/TestAdmin'
 import Login from './components/Login'
 import HelloWorld from './components/HelloWorld'
+import Kchart from './components/home/Kchart'
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/kchart',
+      name: 'Kchart',
+      component: Kchart
     },
     {
       path: '/testadmin',
