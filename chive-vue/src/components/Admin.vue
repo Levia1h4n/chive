@@ -3,8 +3,10 @@
     <span class="title">Chive</span>
 
     <div>
+      <button @click="getAsset()">查看资产</button>
+      <button @click="getBuy()">买</button>
+      <button @click="getSell()">卖</button>
       <button @click="getData('k线图')">k线图</button>
-      <button @click="getData('')">资产</button>
       <button @click="getStockData">查股票数据</button>
     </div>
 
@@ -52,6 +54,84 @@ export default {
     }
   },
   methods: {
+    getInput () {
+      return [this.arg1, this.arg2, this.arg3, this.arg4]
+    },
+    getAsset () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      var path =
+        'http://127.0.0.1:5000/asset?acct=' + input[0] + '&pwd=' + input[1]
+      console.log(path)
+
+      axios
+        .get(path)
+        .then(res => {
+          var data = res.data
+          var msg = res.data.msg
+          console.log('data: ', data)
+          console.log('msg: ', msg)
+          // 把data显示出来就行
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    getBuy () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      var path =
+        'http://127.0.0.1:5000/buy?acct=' +
+        input[0] +
+        '&pwd=' +
+        input[1] +
+        '&stock_code=' +
+        input[2] +
+        '&amount=' +
+        input[3]
+      console.log(path)
+
+      axios
+        .get(path)
+        .then(res => {
+          var data = res.data
+          var msg = res.data.msg
+          console.log('data: ', data)
+          console.log('msg: ', msg)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    getSell () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      var path =
+        'http://127.0.0.1:5000/sell?acct=' +
+        input[0] +
+        '&pwd=' +
+        input[1] +
+        '&stock_code=' +
+        input[2] +
+        '&amount=' +
+        input[3]
+      console.log(path)
+
+      axios
+        .get(path)
+        .then(res => {
+          var data = res.data
+          var msg = res.data.msg
+          console.log('data: ', data)
+          console.log('msg: ', msg)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
     // macd计算
     splitData (rawData) {
       var categoryData = []
@@ -89,9 +169,6 @@ export default {
         result.push(sum / dayCount)
       }
       return result
-    },
-    getInput () {
-      return [this.arg1, this.arg2, this.arg3, this.arg4]
     },
     getStockData () {
       var input = this.getInput()

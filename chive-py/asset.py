@@ -67,7 +67,7 @@ def buy(acct: str, pwd: str, stock_code: str, amount: int) -> bool:
 
     stocks = account_pool[acct]['stocks']
     cur_amount = stocks.get(stock_code, 0)
-    stocks[stock_code] = cur_amount + amount
+    stocks[stock_code] = str(int(cur_amount) + int(amount))
 
     sql_update = """
     UPDATE user_info 
@@ -94,7 +94,7 @@ def sell(acct: str, pwd: str, stock_code: str, amount: int) -> bool:
 
     stocks = account_pool[acct]['stocks']
     cur_amount = stocks.get(stock_code)
-    stocks[stock_code] = cur_amount - amount
+    stocks[stock_code] = str(int(cur_amount) - int(amount))
 
     sql_update = """
     UPDATE user_info 

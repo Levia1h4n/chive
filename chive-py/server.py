@@ -2,12 +2,19 @@ from flask import Flask, request, Response
 from flask_cors import CORS
 import pymysql
 import json
+import copy
 
 import config
 import asset
 
-input_error = lambda: Response({'msg': 'req recieved, input error'}, 200)
-inner_error = lambda: Response({'msg': 'req recieved, inner error'}, 200)
+input_error = lambda msg: Response(json.dumps(
+    {'msg': 'req recieved, invalid input' if len(msg) == 0 else msg}),
+                                   200,
+                                   mimetype='application/json')
+inner_error = lambda: Response(json.dumps({'msg': 'req recieved, inner error'}
+                                          ),
+                               200,
+                               mimetype='application/json')
 
 app = Flask(__name__)
 
@@ -37,19 +44,54 @@ def get_source_data():
 
 @app.route("/asset")
 def get_asset():
-    '''从mysql获取个人资产'''
-    pass
+    '''获取个人资产'''
+    acct = request.args.get('acct')
+    pwd = request.args.get('pwd')
+    if acct not in asset.account_pool or not asset.check_pwd(acct, pwd):
+        return input_error('acct and pws not match')
+
+    ret = copy.deepcopy(asset.account_pool[acct])
+    del ret['pwd']
+    ret = json.dumps({'msg': 'succ', 'data': ret})
+    return Response(response=ret, status=200, mimetype='application/json')
 
 
 @app.route("/buy")
 def get_buy():
-    asset.buy()
-    pass
+    acct = request.args.get('acct')
+    pwd = request.args.get('pwd')
+    stock_code = request.args.get('stock_code')
+    amount = request.args.get('amount')
+
+    if not asset.check_pwd(acct, pwd):
+        return input_error('acct and pwd not match')
+
+    succ = asset.buy(acct, pwd, stock_code, amount)
+    if not succ:
+        return inner_error()
+
+    return Response(json.dumps({'msg': 'succ'}),
+                    200,
+                    mimetype='application/json')
 
 
 @app.route("/sell")
 def get_sell():
-    pass
+    acct = request.args.get('acct')
+    pwd = request.args.get('pwd')
+    stock_code = request.args.get('stock_code')
+    amount = request.args.get('amount')
+
+    if not asset.check_pwd(acct, pwd):
+        return input_error('acct and pwd not match')
+
+    succ = asset.sell(acct, pwd, stock_code, amount)
+    if not succ:
+        return inner_error()
+
+    return Response(json.dumps({'msg': 'succ'}),
+                    200,
+                    mimetype='application/json')
 
 
 @app.route("/data")
