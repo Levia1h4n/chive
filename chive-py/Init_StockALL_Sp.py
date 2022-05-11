@@ -1,6 +1,7 @@
 import datetime
 import tushare as ts
 import pymysql
+
 import config
 
 if __name__ == '__main__':
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     ts.set_token(config.get('token'))
     pro = ts.pro_api()
     # 设定获取日线行情的初始日期和终止日期，其中终止日期设定为昨天。
-    start_dt = '20200101'
+    start_dt = '20150101'
     time_temp = datetime.datetime.now() - datetime.timedelta(days=1)
     end_dt = time_temp.strftime('%Y%m%d')
 
@@ -57,7 +58,7 @@ if __name__ == '__main__':
                 resu[1], "%Y%m%d")).strftime('%Y-%m-%d')
 
             try:
-                sql_insert = "INSERT INTO stock_all (state_dt, stock_code, open, close, high, low, vol, amount, pre_close, amt_change, pct_change) \
+                sql_insert = "REPLACE INTO stock_all (state_dt, stock_code, open, close, high, low, vol, amount, pre_close, amt_change, pct_change) \
                     VALUES ('%s', '%s', '%.2f', '%.2f','%.2f','%.2f','%i','%.2f','%.2f','%.2f','%.2f')" % (
                     state_dt, str(resu[0]), float(resu[2]), float(
                         resu[5]), float(resu[3]), float(resu[4]), float(

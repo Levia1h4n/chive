@@ -2,7 +2,9 @@ from flask import Flask, request, Response
 from flask_cors import CORS
 import pymysql
 import json
+
 import config
+import asset
 
 input_error = lambda: Response({'msg': 'req recieved, input error'}, 200)
 inner_error = lambda: Response({'msg': 'req recieved, inner error'}, 200)
@@ -27,8 +29,32 @@ def testGet():
     return Response(response=ret, status=200, mimetype='application/json')
 
 
+@app.route("/source")
+def get_source_data():
+    '''获取源数据'''
+    pass
+
+
+@app.route("/asset")
+def get_asset():
+    '''从mysql获取个人资产'''
+    pass
+
+
+@app.route("/buy")
+def get_buy():
+    asset.buy()
+    pass
+
+
+@app.route("/sell")
+def get_sell():
+    pass
+
+
 @app.route("/data")
 def get_stock_data():
+    '''画k线图'''
     # GET parameter
     stock_code = request.args.get('stock_code')
     date_from = request.args.get('date_from')
@@ -90,7 +116,7 @@ CORS(app, resources=r'/*')
 #     return environ
 
 
-def after_request(resp:Response)->Response:
+def after_request(resp: Response) -> Response:
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Method'] = '*'
     resp.headers[
@@ -101,8 +127,16 @@ def after_request(resp:Response)->Response:
 # app.after_request(after_request)
 # app.before_request(after_request)
 
-if __name__ == '__main__':
+# flask run / python3 server.py
+# config.init()
 
+if __name__ == '__main__':
+    # 'flask run' cannot load the config in this way
     config.init()
+
+    succ = asset.load()
+    if not succ:
+        print('Load ERROR')
+        exit()
 
     app.run()
