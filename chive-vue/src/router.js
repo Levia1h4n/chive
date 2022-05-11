@@ -22,11 +22,11 @@ export default new Router({
       name: 'Login',
       component: Login
     },
-    {
-      path: '/kchart',
-      name: 'Kchart',
-      component: Kchart
-    },
+    // {
+    //   path: '/kchart',
+    //   name: 'Kchart',
+    //   component: Kchart
+    // },
     {
       path: '/testadmin',
       name: 'TestAdmin',

@@ -132,7 +132,8 @@ if __name__ == '__main__':
     # print(check_pwd('aaa', 'aaa'))
 
     # print('res: ', buy('bbb', 'ccc', 'SH001', 100))
-    # print('res: ', sell('bbb', 'aaa', 'SA001', 100))
-    # print('res: ', sell('bbb', 'aaa', 'SZ001', 1100))
+    # print('res: ', buy('bbb', 'aaa', 'SZ001', 100))
+    # print('res: ', sell('bbb', 'aaa', 'SZ001', 300))
+    # print('res: ', sell('bbb', 'aaa', 'SZ001', 100))
 
     print(account_pool)
