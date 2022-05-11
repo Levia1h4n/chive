@@ -5,7 +5,7 @@ import Admin from './components/Admin'
 import TestAdmin from './components/TestAdmin'
 import Login from './components/Login'
 import HelloWorld from './components/HelloWorld'
-import Kchart from './components/home/Kchart'
+// import Kchart from './components/Kchart'
 
 Vue.use(Router)
 
