@@ -1,19 +1,18 @@
-import json
+import json, hashlib
 
 import config
 import db
 
-
-class Account:
-
-    def __init__(self, acct: str) -> None:
-        self.stock_pool = {}
-
-
+# e.g.
+# acct: 'aaa', pwd: 'bbb'
+# {'aaa': {'stocks': {},
+#          'pwd': '2ce109e9d0faf820b2434e166297934e6177b65ab9951dbc3e204cad4689b39c'}
 account_pool = {}
 
 
 def load() -> bool:
+    '''Load user info from MySQL'''
+
     global account_pool
 
     sql_load = """
@@ -23,14 +22,14 @@ def load() -> bool:
     if ret == False:
         return False
 
-    for user, stock in ret:
-        account_pool[user] = json.loads(stock)
+    for user, stocks, pwd in ret:
+        account_pool[user] = {'stocks': json.loads(stocks), 'pwd': pwd}
     return True
 
 
-def set_account(acct='') -> bool:
-    if acct == '':
-        print('need a valid acct')
+def set_account(acct='', pwd='') -> bool:
+    if acct == '' or pwd == '':
+        print('need a valid input')
         return False
 
     sql_exist = '''
@@ -44,9 +43,9 @@ def set_account(acct='') -> bool:
 
     sql_insert = """
     INSERT INTO 
-    user_info (user_acct, stock_pool)
-    VALUES ('%s', '%s');
-    """ % (acct, json.dumps(dict()))
+    user_info (user_acct, stock_pool, pwd)
+    VALUES ('%s', '%s', '%s');
+    """ % (acct, json.dumps(dict()), get_hash(acct, pwd))
 
     ret = db.execsql(sql_insert)
     if ret == False:
@@ -55,20 +54,85 @@ def set_account(acct='') -> bool:
     return True
 
 
-def buy(stock_code: str, accountID: str, amount: int) -> bool:
-    pass
+def check_pwd(acct: str, pwd: str) -> bool:
+    if get_hash(acct, pwd) == account_pool[acct]['pwd']:
+        return True
+    else:
+        return False
 
 
-def sell(stock_code: str, accountID: str, amount: int) -> bool:
-    pass
+def buy(acct: str, pwd: str, stock_code: str, amount: int) -> bool:
+    if acct not in account_pool or not check_pwd(acct, pwd):
+        return False
+
+    stocks = account_pool[acct]['stocks']
+    cur_amount = stocks.get(stock_code, 0)
+    stocks[stock_code] = cur_amount + amount
+
+    sql_update = """
+    UPDATE user_info 
+    SET    stock_pool = '%s'
+    WHERE  user_acct = '%s';
+    """ % (json.dumps(stocks), acct)
+
+    ret = db.execsql(sql_update)
+    if ret == False:
+        print('inner ERROR')
+        return False
+
+    account_pool[acct]['stocks'] = stocks
+
+    return True
+
+
+def sell(acct: str, pwd: str, stock_code: str, amount: int) -> bool:
+    if acct not in account_pool \
+        or stock_code not in account_pool[acct]['stocks'] \
+        or amount > account_pool[acct]['stocks'][stock_code] \
+        or not check_pwd(acct, pwd):
+        return False
+
+    stocks = account_pool[acct]['stocks']
+    cur_amount = stocks.get(stock_code)
+    stocks[stock_code] = cur_amount - amount
+
+    sql_update = """
+    UPDATE user_info 
+    SET    stock_pool = '%s'
+    WHERE  user_acct = '%s';
+    """ % (json.dumps(stocks), acct)
+
+    ret = db.execsql(sql_update)
+    if ret == False:
+        print('inner ERROR')
+        return False
+
+    account_pool[acct]['stocks'] = stocks
+
+    return True
+
+
+def get_hash(acct: str, pwd: str) -> str:
+    return hashlib.sha256((acct + pwd).encode('utf-8')).hexdigest()
 
 
 if __name__ == '__main__':
     # test
     config.init()
 
-    set_account("aaa")
+    # set_account("aaa", "bbb")
+    # set_account("bbb", "aaa")
 
     load()
+
+    # print(get_hash("abc", "abcd"))
+    # print(len(get_hash("abc", "abcd")))
+
+    # print(check_pwd('aaa', 'bbb'))
+    # print(check_pwd('aaa', 'aaa'))
+
+    # print('res: ', buy('bbb', 'ccc', 'SH001', 100))
+    # print('res: ', sell('bbb', 'aaa', 'SA001', 100))
+    # print('res: ', sell('bbb', 'aaa', 'SZ001', 1100))
 
     print(account_pool)
