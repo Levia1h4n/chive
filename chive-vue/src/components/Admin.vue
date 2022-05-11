@@ -18,12 +18,14 @@
     </div>
 
     <div>
-      <input v-model="stock_code" placeholder="edit me" />
-      <p>stock_code is: {{ stock_code }}</p>
-      <input v-model="date_from" placeholder="edit me" />
-      <p>date_from is: {{ date_from }}</p>
-      <input v-model="date_to" placeholder="edit me" />
-      <p>date_to is: {{ date_to }}</p>
+      <input v-model="arg1" placeholder="edit me" />
+      <p>stock_code / acct: {{ arg1 }}</p>
+      <input v-model="arg2" placeholder="edit me" />
+      <p>date_from / pwd: {{ arg2 }}</p>
+      <input v-model="arg3" placeholder="edit me" />
+      <p>date_to is / stock_code: {{ arg3 }}</p>
+      <input v-model="arg4" placeholder="edit me" />
+      <p>amount: {{ arg4 }}</p>
     </div>
   </div>
 </template>
@@ -36,9 +38,11 @@ export default {
   name: 'Admin',
   data () {
     return {
-      stock_code: '',
-      date_from: '',
-      date_to: '',
+      arg1: '',
+      arg2: '',
+      arg3: '',
+      arg4: '',
+      charts: null,
       // r: null,
       // msg: null,
       menu: {
@@ -86,14 +90,38 @@ export default {
       }
       return result
     },
+    getInput () {
+      return [this.arg1, this.arg2, this.arg3, this.arg4]
+    },
     getStockData () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      if (
+        input[0].length !== 9 ||
+        input[1].length !== 10 ||
+        input[2].length !== 10
+      ) {
+        alert(
+          'Invalid input\ne.g.\narg1: 603912.SH\narg2: 2020-03-01\narg3: 2020-04-01'
+        )
+        return
+      }
       var path =
-        'http://127.0.0.1:5000/data?stock_code=603912.SH&date_from=2020-03-01&date_to=2020-04-01'
+        'http://127.0.0.1:5000/data?stock_code=' +
+        input[0] +
+        '&date_from=' +
+        input[1] +
+        '&date_to=' +
+        input[2]
+      console.log(path)
+
+      // var path =
+      //   'http://127.0.0.1:5000/data?stock_code=603912.SH&date_from=2020-03-01&date_to=2020-04-01'
       axios
         .get(path)
         .then(res => {
           var data = res.data.data
-          // var msg = res.data.msg
           // 这里实现的是一个比较简单的，可以按照需求将函数移动到methods函数中
           var data0 = this.$options.methods.splitData(data)
           console.log(data0)
@@ -303,14 +331,12 @@ export default {
               }
             ]
           }
+          if (this.charts !== null && this.charts !== undefined) {
+            this.charts.dispose()
+          }
           // 进行初始化
-          var charts = echarts.init(this.$refs.echartContainer)
-          charts.setOption(option)
-          // console.log(data)
-          // console.log(msg)
-          // for (var i = 0; i < data.length; i++) {
-          //   console.log(data[i])
-          // }
+          this.charts = echarts.init(this.$refs.echartContainer)
+          this.charts.setOption(option)
         })
         .catch(error => {
           console.error(error)
