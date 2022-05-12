@@ -121,9 +121,9 @@ table tr:nth-child(even) {
 }
 
 .asset {
-  position: relative; 
-  bottom: 700px; 
-  left: 400px
+  position: relative;
+  bottom: 700px;
+  left: 400px;
 }
 </style>
 
@@ -268,7 +268,7 @@ export default {
         .catch(error => {
           console.error(error)
         })
-      this.getAsset ()
+      this.getAsset()
     },
     getSell () {
       var input = this.getInput()
