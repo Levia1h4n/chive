@@ -30,7 +30,7 @@
       <p>amount: {{ arg4 }}</p>
     </div>
 
-    <div v-if=showchart>
+    <div v-if="showchart">
       <h2>kchart</h2>
       <div
         id="echartContainer"
@@ -39,8 +39,7 @@
       ></div>
     </div>
     <center>
-      <div v-if=showrecord style="margin: auto">
-        
+      <div v-if="showrecord" style="margin: auto">
         <ul>
           <!-- <li v-for="(key, val) in records" v-bind:key="val">
           {{ records.key }} - {{ records.val }}
@@ -56,8 +55,6 @@
         </ul>
       </div>
     </center>
-    
-    
   </div>
 </template>
 
