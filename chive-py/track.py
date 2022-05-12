@@ -43,7 +43,7 @@ def get_start_time():
     return timer_start_time
 
 
-def set_next_loop(default_interval=3):
+def set_next_loop(default_interval=10):
     timer = threading.Timer(default_interval, track_once)
     timer.start()
     return

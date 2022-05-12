@@ -3,14 +3,21 @@
     <span class="title">Chive</span>
 
     <div>
-      <button @click="getAsset()">查看资产</button>
-      <button @click="getBuy()">买</button>
-      <button @click="getSell()">卖</button>
-      <button @click="getData('k线图')">k线图</button>
-      <button @click="getStockData">查股票数据</button>
+      <button @click="getAsset()">Personal Asset</button>
+      <button @click="getBuy()">Buy</button>
+      <button @click="getSell()">Sell</button>
+      <button @click="getData('k线图')">未设置功能</button>
+      <button @click="getStockData">Candlestick</button>
     </div>
 
-    <br>
+    <div>
+      <h1>Draw Candlestick</h1>
+      <div
+        id="echartContainer"
+        ref="echartContainer"
+        style="width: 100%; height: 400px; position: relative"
+      ></div>
+    </div>
 
     <div>
       <input v-model="arg1" placeholder="edit me" />
@@ -93,7 +100,7 @@ export default {
       console.log(path)
 
       axios
-        .get(path)
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
           var data = res.data.data.stocks
           var msg = res.data.msg
@@ -134,7 +141,7 @@ export default {
       console.log(path)
 
       axios
-        .get(path)
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
           var data = res.data
           var msg = res.data.msg
@@ -161,7 +168,7 @@ export default {
       console.log(path)
 
       axios
-        .get(path)
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
           var data = res.data
           var msg = res.data.msg
@@ -248,7 +255,7 @@ export default {
       // var path =
       //   'http://127.0.0.1:5000/data?stock_code=603912.SH&date_from=2020-03-01&date_to=2020-04-01'
       axios
-        .get(path)
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
           var data = res.data.data
           console.log(data)
@@ -488,7 +495,7 @@ export default {
       console.log(path)
       // var msg = ''
       axios
-        .get(path)
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
           var data = res.data.data
           var msg = res.data.msg
