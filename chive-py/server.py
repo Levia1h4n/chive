@@ -6,6 +6,7 @@ import copy
 
 import config
 import asset
+import track
 
 input_error = lambda msg: Response(json.dumps(
     {'msg': 'req recieved, invalid input' if len(msg) == 0 else msg}),
@@ -94,6 +95,40 @@ def get_sell():
                     mimetype='application/json')
 
 
+@app.route("/track")
+def get_track():
+    stock_code = request.args.get('stock_code')
+    succ = track.add_stock(stock_code)
+    if not succ:
+        return inner_error()
+
+    return Response(json.dumps({'msg': 'succ'}),
+                    200,
+                    mimetype='application/json')
+
+
+@app.route("/track_cancel")
+def get_track_cancel():
+    stock_code = request.args.get('stock_code')
+    succ = track.del_stock(stock_code)
+    if not succ:
+        return inner_error()
+
+    return Response(json.dumps({'msg': 'succ'}),
+                    200,
+                    mimetype='application/json')
+
+
+@app.route("/track_list")
+def get_track_list():
+    return Response(json.dumps({
+        'msg': 'succ',
+        'data': list(track.get_track_list())
+    }),
+                    200,
+                    mimetype='application/json')
+
+
 @app.route("/data")
 def get_stock_data():
     '''画k线图'''
@@ -178,7 +213,12 @@ if __name__ == '__main__':
 
     succ = asset.load()
     if not succ:
-        print('Load ERROR')
+        print('asset Load ERROR')
+        exit()
+
+    succ = track.init()
+    if not succ:
+        print('track INIT ERROR')
         exit()
 
     app.run()
