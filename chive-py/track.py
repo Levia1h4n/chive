@@ -3,8 +3,10 @@ import datetime
 import json
 
 import db
+import source_data as sd
 
 track_set = set()
+cur_day = datetime.datetime.now() - datetime.timedelta(days=365)
 
 
 def load() -> bool:
@@ -34,25 +36,35 @@ def get_start_time():
     # 获取明天起始时间点
     next_time = datetime.datetime.strptime(
         str(next_time.date().year) + "-" + str(next_time.date().month) + "-" +
-        str(next_time.date().day) + " 23:23:00", "%Y-%m-%d %H:%M:%S")
+        str(next_time.date().day) + " 03:00:00", "%Y-%m-%d %H:%M:%S")
 
     # 获取距离明天时间，单位为秒
     timer_start_time = (next_time - now_time).total_seconds()
     return timer_start_time
 
 
-def set_next_loop():
-    timer = threading.Timer(5, track_once)
+def set_next_loop(default_interval=10):
+    timer = threading.Timer(default_interval, track_once)
     timer.start()
     return
 
 
 def track_once():
-    # print('trigger')
-    # 查询列表, 更新到数据库
-    # TODO
+    '''query from tushare, save in MySQL'''
+
+    global cur_day
+    st = cur_day.strftime('%Y%m%d')
+    et = cur_day + datetime.timedelta(days=1)
+    et = et.strftime('%Y%m%d')
+
+    print('\nCurrent Day(monitered): ', st)
+    sd.get_source_data(track_set, st, et)
+
+    cur_day += datetime.timedelta(days=1)
+
     # need recursive call
     set_next_loop()
+    return
 
 
 def init():
@@ -97,17 +109,16 @@ def del_stock(stock_code: str) -> bool:
     if stock_code not in track_set:
         return False
 
-    sql_insert = """
+    sql_delete = """
     DELETE FROM track_list
     WHERE stock_code = '%s';
     """ % (stock_code)
 
-    ret = db.execsql(sql_insert)
+    ret = db.execsql(sql_delete)
     if ret == False:
         print('inner ERROR')
         return False
 
-    # global track_set
     track_set.remove(stock_code)
 
     return True
