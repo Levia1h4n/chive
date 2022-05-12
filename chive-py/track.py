@@ -36,14 +36,14 @@ def get_start_time():
     # 获取明天起始时间点
     next_time = datetime.datetime.strptime(
         str(next_time.date().year) + "-" + str(next_time.date().month) + "-" +
-        str(next_time.date().day) + " 03:00:00", "%Y-%m-%d %H:%M:%S")
+        str(next_time.date().day) + " 02:14:00", "%Y-%m-%d %H:%M:%S")
 
     # 获取距离明天时间，单位为秒
     timer_start_time = (next_time - now_time).total_seconds()
     return timer_start_time
 
 
-def set_next_loop(default_interval=10):
+def set_next_loop(default_interval=3):
     timer = threading.Timer(default_interval, track_once)
     timer.start()
     return
@@ -57,7 +57,7 @@ def track_once():
     et = cur_day + datetime.timedelta(days=1)
     et = et.strftime('%Y%m%d')
 
-    print('\nCurrent Day(monitered): ', st)
+    print('\nCurrent Day(mock): ', st)
     sd.get_source_data(track_set, st, et)
 
     cur_day += datetime.timedelta(days=1)
@@ -126,6 +126,29 @@ def del_stock(stock_code: str) -> bool:
 
 def get_track_list() -> set:
     return track_set
+
+
+def check_count(stock_code: str) -> bool:
+    '''检查有无最近20条数据'''
+
+    et = cur_day.strftime('%Y-%m-%d')
+    st = cur_day - datetime.timedelta(days=40)
+    st = st.strftime('%Y-%m-%d')
+    print(st, et)
+    sql_search = """
+    SELECT * FROM stock_all 
+    WHERE stock_code = '%s' and state_dt >= '%s' and state_dt <= '%s';
+    """ % (stock_code, st, et)
+
+    ret = db.execsql(sql_search)
+    if ret == False:
+        print('inner ERROR')
+        return False
+
+    if len(ret) < 20:
+        return False
+
+    return True
 
 
 if __name__ == '__main__':

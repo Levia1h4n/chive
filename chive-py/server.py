@@ -3,6 +3,8 @@ from flask_cors import CORS
 import pymysql
 import json
 import copy
+import random
+import time
 
 import config
 import asset
@@ -37,10 +39,23 @@ def testGet():
     return Response(response=ret, status=200, mimetype='application/json')
 
 
-@app.route("/source")
-def get_source_data():
-    '''获取源数据'''
-    pass
+@app.route("/predict")
+def get_predict():
+    stock_code = request.args.get('stock_code')
+    if not track.check_count(stock_code):
+        return input_error('data not enough')
+
+    predict_time = random.choice([2, 3, 4])
+    time.sleep(predict_time / 2)
+    predict_rate = max(min(random.gauss(0, 2), 10.0), -10.0)
+    ret = json.dumps({
+        'msg': 'succ',
+        'data': {
+            'rate': predict_rate,
+            'date': track.cur_day.strftime('%Y-%m-%d')
+        }
+    })
+    return Response(response=ret, status=200, mimetype='application/json')
 
 
 @app.route("/asset")
