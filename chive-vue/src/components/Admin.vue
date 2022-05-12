@@ -5,7 +5,7 @@
     <br />
     <!-- <span style="font-size = 200px">Quatitative Trading Platform</span> -->
 
-    <div>
+    <div class="buttonSet">
       <button @click="getAsset()">Personal Asset</button>
       <button @click="getBuy()">Buy</button>
       <button @click="getSell()">Sell</button>
@@ -14,17 +14,18 @@
       <button @click="getTrackCancel()">Track Cancel</button>
       <button @click="getTrackList()">Track List</button>
     </div>
+    <br />
 
-    <div>
+    <!-- <div>
       <h1>Draw Candlestick</h1>
       <div
         id="echartContainer"
         ref="echartContainer"
         style="width: 100%; height: 400px; position: relative"
       ></div>
-    </div>
+    </div> -->
 
-    <div>
+    <div class="inputArea">
       <input v-model="arg1" placeholder="edit me" />
       <br />
       <p>stock_code / acct: {{ arg1 }}</p>
@@ -45,57 +46,32 @@
     <br />
 
     <center>
-      <div v-if="showchart">
+      <div v-if="showchart" class="chart">
         <!-- <h2>kchart</h2> -->
 
         <div
           id="echartContainer"
           ref="echartContainer"
-          style="width: 100%; height: 400px"
+          style="width: 80%; height: 600px"
         ></div>
       </div>
     </center>
 
-    <div
-      v-if="showrecord"
-      style="position: relative; bottom: 700px; left: 400px"
-    >
-      <table
-        style="
-          border-collapse: collapse;
-          /* margin: 0 auto; */
-          text-align: center;
-        "
-      >
-        <thead
-          style="
-            border: 1px solid #cad9ea;
-            color: #666;
-            height: 30px;
-            background-color: #cce8eb;
-            width: 100px;
-          "
-        >
-          <tr style="border: 1px solid #cad9ea; color: #666; height: 30px">
-            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
-              stock number
-            </td>
-            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
-              volume
-            </td>
+    <div v-if="showrecord" class="asset">
+      <table>
+        <thead>
+          <tr>
+            <th>stock number</th>
+            <th>volume</th>
           </tr>
         </thead>
 
-        <tbody style="border: 1px solid #cad9ea; color: #666; height: 30px">
-          <tr
-            v-for="(record, index) in records"
-            v-bind:key="index"
-            style="border: 1px solid #cad9ea; color: #666; height: 30px"
-          >
-            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+        <tbody>
+          <tr v-for="(record, index) in records" v-bind:key="index">
+            <td>
               {{ record.key }}
             </td>
-            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+            <td>
               {{ record.val }}
             </td>
           </tr>
@@ -116,6 +92,40 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+table {
+  border-collapse: collapse;
+  /* margin: 0 auto; */
+  text-align: center;
+}
+
+table td,
+table th {
+  border: 1px solid #cad9ea;
+  color: #666;
+  height: 30px;
+}
+
+table thead th {
+  background: #84cbd3;
+  width: 200px;
+}
+
+table tr:nth-child(odd) {
+  background: #fff;
+}
+
+table tr:nth-child(even) {
+  background: #f5fafa;
+}
+
+.asset {
+  position: relative; 
+  bottom: 700px; 
+  left: 400px
+}
+</style>
 
 <script>
 import axios from 'axios'
@@ -258,6 +268,7 @@ export default {
         .catch(error => {
           console.error(error)
         })
+      this.getAsset ()
     },
     getSell () {
       var input = this.getInput()
