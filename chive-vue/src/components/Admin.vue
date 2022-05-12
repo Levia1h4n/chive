@@ -9,8 +9,10 @@
       <button @click="getAsset()">Personal Asset</button>
       <button @click="getBuy()">Buy</button>
       <button @click="getSell()">Sell</button>
-      <button @click="getData('k线图')">未设置功能</button>
-      <button @click="getStockData">Candlestick</button>
+      <button @click="getStockData()">Candlestick</button>
+      <button @click="getTrack()">Track</button>
+      <button @click="getTrackCancel()">Track Cancel</button>
+      <button @click="getTrackList()">Track List</button>
     </div>
 
     <div>
@@ -143,6 +145,57 @@ export default {
     getInput () {
       return [this.arg1, this.arg2, this.arg3, this.arg4]
     },
+    getTrack () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      var path = 'http://127.0.0.1:5000/track?stock_code=' + input[0]
+      console.log('URL: ', path)
+
+      axios
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .then(res => {
+          var data = res.data
+          console.log('data: ', data)
+          // TODO
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    getTrackCancel () {
+      var input = this.getInput()
+      console.log('input: ', input)
+
+      var path = 'http://127.0.0.1:5000/track_cancel?stock_code=' + input[0]
+      console.log('URL: ', path)
+
+      axios
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .then(res => {
+          var data = res.data
+          console.log('data: ', data)
+          // TODO
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    getTrackList () {
+      var path = 'http://127.0.0.1:5000/track_list'
+      console.log('URL: ', path)
+
+      axios
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .then(res => {
+          var data = res.data
+          console.log('data: ', data)
+          // TODO
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
     getAsset () {
       this.showrecord = true
       this.showchart = true
@@ -151,7 +204,7 @@ export default {
 
       var path =
         'http://127.0.0.1:5000/asset?acct=' + input[0] + '&pwd=' + input[1]
-      console.log(path)
+      console.log('URL: ', path)
 
       axios
         .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
@@ -192,7 +245,7 @@ export default {
         input[2] +
         '&amount=' +
         input[3]
-      console.log(path)
+      console.log('URL: ', path)
 
       axios
         .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
@@ -219,7 +272,7 @@ export default {
         input[2] +
         '&amount=' +
         input[3]
-      console.log(path)
+      console.log('URL: ', path)
 
       axios
         .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
@@ -304,7 +357,7 @@ export default {
         input[1] +
         '&date_to=' +
         input[2]
-      console.log(path)
+      console.log('URL: ', path)
 
       // var path =
       //   'http://127.0.0.1:5000/data?stock_code=603912.SH&date_from=2020-03-01&date_to=2020-04-01'
@@ -546,7 +599,7 @@ export default {
       if (cmd !== '') {
         path += '?arg=1'
       }
-      console.log(path)
+      console.log('URL: ', path)
       // var msg = ''
       axios
         .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
