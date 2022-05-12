@@ -1,6 +1,9 @@
 <template>
   <div>
-    <span class="title">Chive</span>
+    <span class="title">Quatitative Trading Platform</span>
+    <br />
+    <br />
+    <!-- <span style="font-size = 200px">Quatitative Trading Platform</span> -->
 
     <div>
       <button @click="getAsset()">Personal Asset</button>
@@ -21,40 +24,94 @@
 
     <div>
       <input v-model="arg1" placeholder="edit me" />
+      <br />
       <p>stock_code / acct: {{ arg1 }}</p>
+      <br />
       <input v-model="arg2" placeholder="edit me" />
+      <br />
       <p>date_from / pwd: {{ arg2 }}</p>
+      <br />
       <input v-model="arg3" placeholder="edit me" />
+      <br />
       <p>date_to is / stock_code: {{ arg3 }}</p>
+      <br />
       <input v-model="arg4" placeholder="edit me" />
+      <br />
       <p>amount: {{ arg4 }}</p>
     </div>
 
-    <div v-if="showchart">
-      <h2>kchart</h2>
-      <div
-        id="echartContainer"
-        ref="echartContainer"
-        style="width: 100%; height: 400px; position: relative"
-      ></div>
-    </div>
+    <br />
+
     <center>
-      <div v-if="showrecord" style="margin: auto">
-        <ul>
-          <!-- <li v-for="(key, val) in records" v-bind:key="val">
-          {{ records.key }} - {{ records.val }}
-        </li> -->
-          <li style="width: 200px; position: relative">stock:volume</li>
-          <li
-            v-for="(record, index) in records"
-            v-bind:key="index"
-            style="width: 200px; position: relative"
-          >
-            {{ record.key }}: {{ record.val }}
-          </li>
-        </ul>
+      <div v-if="showchart">
+        <!-- <h2>kchart</h2> -->
+
+        <div
+          id="echartContainer"
+          ref="echartContainer"
+          style="width: 100%; height: 400px"
+        ></div>
       </div>
     </center>
+
+    <div
+      v-if="showrecord"
+      style="position: relative; bottom: 700px; left: 400px"
+    >
+      <table
+        style="
+          border-collapse: collapse;
+          /* margin: 0 auto; */
+          text-align: center;
+        "
+      >
+        <thead
+          style="
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 30px;
+            background-color: #cce8eb;
+            width: 100px;
+          "
+        >
+          <tr style="border: 1px solid #cad9ea; color: #666; height: 30px">
+            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+              stock number
+            </td>
+            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+              volume
+            </td>
+          </tr>
+        </thead>
+
+        <tbody style="border: 1px solid #cad9ea; color: #666; height: 30px">
+          <tr
+            v-for="(record, index) in records"
+            v-bind:key="index"
+            style="border: 1px solid #cad9ea; color: #666; height: 30px"
+          >
+            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+              {{ record.key }}
+            </td>
+            <td style="border: 1px solid #cad9ea; color: #666; height: 30px">
+              {{ record.val }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <ul>
+        <li style="width: 200px; font-size: 20px; font-weight: 700">
+          stock:volume
+        </li>
+        <li
+          v-for="(record, index) in records"
+          v-bind:key="index"
+          style="width: 200px"
+        >
+          {{ record.key }}: {{ record.val }}
+        </li>
+      </ul> -->
+    </div>
   </div>
 </template>
 
@@ -88,7 +145,7 @@ export default {
     },
     getAsset () {
       this.showrecord = true
-      this.showchart = false
+      this.showchart = true
       var input = this.getInput()
       console.log('input: ', input)
 
@@ -225,7 +282,7 @@ export default {
       return result
     },
     getStockData () {
-      this.showrecord = false
+      // this.showrecord = true
       this.showchart = true
       var input = this.getInput()
       console.log('input: ', input)
