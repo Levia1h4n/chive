@@ -10,23 +10,7 @@
       <button @click="getStockData">查股票数据</button>
     </div>
 
-    <div>
-      <h1>k线图</h1>
-      <div
-        id="echartContainer"
-        ref="echartContainer"
-        style="width: 100%; height: 400px; position: relative"
-      ></div>
-    </div>
-
-    <div>
-      <ol>
-        <!-- <li v-for="(key, val) in records" v-bind:key="val">
-          {{ records.key }} - {{ records.val }}
-        </li> -->
-        <li v-for="(record, index) in records" v-bind:key="index"> {{ record.index }} {{ record.key }}: {{ record.val }} </li>
-      </ol>
-    </div>
+    <br>
 
     <div>
       <input v-model="arg1" placeholder="edit me" />
@@ -38,6 +22,35 @@
       <input v-model="arg4" placeholder="edit me" />
       <p>amount: {{ arg4 }}</p>
     </div>
+
+    <div v-if=showchart>
+      <h2>kchart</h2>
+      <div
+        id="echartContainer"
+        ref="echartContainer"
+        style="width: 100%; height: 400px; position: relative"
+      ></div>
+    </div>
+    <center>
+      <div v-if=showrecord style="margin: auto">
+        
+        <ul>
+          <!-- <li v-for="(key, val) in records" v-bind:key="val">
+          {{ records.key }} - {{ records.val }}
+        </li> -->
+          <li style="width: 200px; position: relative">stock:volume</li>
+          <li
+            v-for="(record, index) in records"
+            v-bind:key="index"
+            style="width: 200px; position: relative"
+          >
+            {{ record.key }}: {{ record.val }}
+          </li>
+        </ul>
+      </div>
+    </center>
+    
+    
   </div>
 </template>
 
@@ -60,7 +73,9 @@ export default {
       menu: {
         k线图: '/t1/t2',
         资产: '/t3/t4'
-      }
+      },
+      showchart: false,
+      showrecord: false
     }
   },
   methods: {
@@ -68,6 +83,8 @@ export default {
       return [this.arg1, this.arg2, this.arg3, this.arg4]
     },
     getAsset () {
+      this.showrecord = true
+      this.showchart = false
       var input = this.getInput()
       console.log('input: ', input)
 
@@ -85,7 +102,7 @@ export default {
           for (var i in data) {
             // 用javascript的for/in循环遍历对象的属性
             console.log('key: ', i, '  val: ', data[i])
-            data1.push({key: i, val: data[i]})
+            data1.push({ key: i, val: data[i] })
           }
           console.log('msg: ', msg)
 
@@ -204,6 +221,8 @@ export default {
       return result
     },
     getStockData () {
+      this.showrecord = false
+      this.showchart = true
       var input = this.getInput()
       console.log('input: ', input)
 
