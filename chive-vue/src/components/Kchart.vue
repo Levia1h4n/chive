@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Echarts绘制k线图</h1>
-    <div id='echartContainer' ref='echartContainer' style='width:100%; height:400px'></div>
+    <!-- <h1>Echarts绘制k线图</h1> -->
+    <div id='echartContainer' ref='echartContainer' style='width:100%; height:600px'></div>
   </div>
 </template>
 
@@ -107,6 +107,7 @@ export default {
   mounted() {
     // 这里实现的是一个比较简单的，可以按照需求将函数移动到methods函数中
     var data0 = splitData(this.data);
+    console.log(data0.macds)
     // macd计算
     function splitData(rawData) {
       var categoryData = [];

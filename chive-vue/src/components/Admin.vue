@@ -11,12 +11,21 @@
     </div>
 
     <div>
-      <h1>Echarts绘制k线图</h1>
+      <h1>k线图</h1>
       <div
         id="echartContainer"
         ref="echartContainer"
         style="width: 100%; height: 400px; position: relative"
       ></div>
+    </div>
+
+    <div>
+      <ol>
+        <!-- <li v-for="(key, val) in records" v-bind:key="val">
+          {{ records.key }} - {{ records.val }}
+        </li> -->
+        <li v-for="(record, index) in records" v-bind:key="index"> {{ record.index }} {{ record.key }}: {{ record.val }} </li>
+      </ol>
     </div>
 
     <div>
@@ -44,6 +53,7 @@ export default {
       arg2: '',
       arg3: '',
       arg4: '',
+      records: [],
       charts: null,
       // r: null,
       // msg: null,
@@ -68,11 +78,24 @@ export default {
       axios
         .get(path)
         .then(res => {
-          var data = res.data
+          var data = res.data.data.stocks
           var msg = res.data.msg
           console.log('data: ', data)
+          var data1 = []
+          for (var i in data) {
+            // 用javascript的for/in循环遍历对象的属性
+            console.log('key: ', i, '  val: ', data[i])
+            data1.push({key: i, val: data[i]})
+          }
           console.log('msg: ', msg)
+
+          // for (var i = 0; i < data.length; i++) {
+          //   data1.push(data[i])
+          // }
+
+          console.log('data1', data1)
           // 把data显示出来就行
+          this.records = data1
         })
         .catch(error => {
           console.error(error)
@@ -136,22 +159,31 @@ export default {
     splitData (rawData) {
       var categoryData = []
       var values = []
-      var macds = []
-      var difs = []
-      var deas = []
+      var volumes = []
+      var tag = []
+      // var macds = []
+      // var difs = []
+      // var deas = []
       for (var i = 0; i < rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0])
-        values.push(rawData[i])
-        macds.push(rawData[i][6])
-        difs.push(rawData[i][7])
-        deas.push(rawData[i][8])
+        var temp = rawData[i][4]
+        rawData[i][4] = rawData[i][3]
+        rawData[i][3] = temp
+        volumes.push(rawData[i][5] * (rawData[i][2] >= rawData[i][1] ? 1 : -1))
+        tag.push(rawData[i][2] >= rawData[i][1] ? 1 : -1)
+        values.push(rawData[i].splice(1, 5))
+        // macds.push(rawData[i][6])
+        // difs.push(rawData[i][7])
+        // deas.push(rawData[i][8])
       }
       return {
         categoryData: categoryData,
         values: values,
-        macds: macds,
-        difs: difs,
-        deas: deas
+        tag: tag,
+        volumes: volumes
+        // macds: macds,
+        // difs: difs,
+        // deas: deas
       }
     },
     // ma均线函数
@@ -166,7 +198,8 @@ export default {
         for (var j = 0; j < dayCount; j++) {
           sum += data0.values[i - j][1]
         }
-        result.push(sum / dayCount)
+        result.push(+(sum / dayCount).toFixed(3))
+        // result.push(sum / dayCount)
       }
       return result
     },
@@ -199,6 +232,7 @@ export default {
         .get(path)
         .then(res => {
           var data = res.data.data
+          console.log(data)
           // 这里实现的是一个比较简单的，可以按照需求将函数移动到methods函数中
           var data0 = this.$options.methods.splitData(data)
           console.log(data0)
@@ -208,8 +242,8 @@ export default {
             legend: {
               // bottom: auto,
               left: 'center',
-              data: ['MA5', 'MA10', 'MA20', 'MA30']
-              // data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
+              // data: ['MA5', 'MA10', 'MA20', 'MA30']
+              data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
             },
             tooltip: {
               trigger: 'axis',
@@ -275,6 +309,7 @@ export default {
                 splitLine: { show: false },
                 axisLabel: { show: true },
                 axisLine: {
+                  onZero: false,
                   lineStyle: {
                     color: 'red'
                   }
@@ -305,24 +340,24 @@ export default {
             ],
             series: [
               {
-                name: '555',
+                name: 'Dow-Jones index',
                 type: 'candlestick',
-                data: data0.values,
-                markPoint: {
-                  data: [
-                    {
-                      name: 'XX标点'
-                    }
-                  ]
-                },
-                markLine: {
-                  silent: true,
-                  data: [
-                    {
-                      yAxis: 2222
-                    }
-                  ]
-                }
+                data: data0.values
+                // markPoint: {
+                //   data: [
+                //     {
+                //       name: 'XX标点'
+                //     }
+                //   ]
+                // },
+                // markLine: {
+                //   silent: true,
+                //   data: [
+                //     {
+                //       yAxis: 2222
+                //     }
+                //   ]
+                // }
               },
               {
                 name: 'MA5',
@@ -372,12 +407,19 @@ export default {
                   }
                 }
               },
+              // {
+              //   name: 'Volume',
+              //   type: 'bar',
+              //   xAxisIndex: 1,
+              //   yAxisIndex: 1,
+              //   data: data0.volumes
+              // }
               {
-                name: 'MACD',
+                name: 'Vol',
                 type: 'bar',
                 xAxisIndex: 1,
                 yAxisIndex: 1,
-                data: data0.macds,
+                data: data0.volumes,
                 itemStyle: {
                   normal: {
                     color: function (params) {
@@ -391,21 +433,21 @@ export default {
                     }
                   }
                 }
-              },
-              {
-                name: 'DIF',
-                type: 'line',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: data0.difs
-              },
-              {
-                name: 'DEA',
-                type: 'line',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: data0.deas
               }
+              // {
+              //   name: 'DIF',
+              //   type: 'line',
+              //   xAxisIndex: 1,
+              //   yAxisIndex: 1,
+              //   data: data0.difs
+              // },
+              // {
+              //   name: 'DEA',
+              //   type: 'line',
+              //   xAxisIndex: 1,
+              //   yAxisIndex: 1,
+              //   data: data0.deas
+              // }
             ]
           }
           if (this.charts !== null && this.charts !== undefined) {

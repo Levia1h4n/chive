@@ -120,7 +120,7 @@ if __name__ == '__main__':
     # test
     config.init()
 
-    # set_account("aaa", "bbb")
+    set_account("aaa", "bbb")
     # set_account("bbb", "aaa")
 
     load()

@@ -5,6 +5,7 @@ import Admin from './components/Admin'
 import TestAdmin from './components/TestAdmin'
 import Login from './components/Login'
 import HelloWorld from './components/HelloWorld'
+// import Record from './components/Record'
 // import Kchart from './components/Kchart'
 
 Vue.use(Router)
@@ -37,5 +38,10 @@ export default new Router({
       name: 'Admin',
       component: Admin
     }
+    // {
+    //   path: '/record',
+    //   name: 'Record',
+    //   component: Record
+    // }
   ]
 })
