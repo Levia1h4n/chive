@@ -6,19 +6,18 @@
     <br />
     <br />
     <!-- <span style="font-size = 200px">Quatitative Trading Platform</span> -->
+    <div class="buttonSet">
+      <button id="btn1" class="button1" @click="getAsset()">
+        Personal Asset
+      </button>
+      <button class="button1" @click="getBuy()">Buy</button>
+      <button @click="getSell()">Sell</button>
+      <button id="btn1" @click="getStockData()">Candlestick</button>
+      <button @click="getTrack()">Track</button>
+      <button id="btn1" @click="getTrackCancel()">Track Cancel</button>
+      <button @click="getTrackList()">Track List</button>
+    </div>
     <div class="layer1">
-      <div class="buttonSet">
-        <button id="btn1" class="button1" @click="getAsset()">
-          Personal Asset
-        </button>
-        <button class="button1" @click="getBuy()">Buy</button>
-        <button @click="getSell()">Sell</button>
-        <button id="btn1" @click="getStockData()">Candlestick</button>
-        <button @click="getTrack()">Track</button>
-        <button id="btn1" @click="getTrackCancel()">Track Cancel</button>
-        <button @click="getTrackList()">Track List</button>
-      </div>
-
       <div class="inputArea">
         <input v-model="arg1" placeholder="edit me" />
         <p>stock_code / acct: {{ arg1 }}</p>
@@ -104,52 +103,58 @@
   /* background: rgba(0, 0, 0, 0.2); */
   font-family: "Times New Roman", Times, serif;
 }
-.layer1 {
-  width: 70%;
-  height: 35%;
-  /* background: rgba(177, 69, 69, 0.2); */
-}
 .buttonSet {
-  width: 40%;
-  height: 15%;
+  width: 70%;
+  height: 5%;
   /* background: #84cbd3; */
 }
+.layer1 {
+  width: 70%;
+  height: 30%;
+  /* background: rgba(177, 69, 69, 0.2); */
+  font-size: 40px;
+}
+
 .inputArea {
-  width: 40%;
+  width: 30%;
   height: 70%;
   /* background: rgba(0, 0, 0, 0.2); */
+  font-size: 40px;
 }
 .msgArea {
   align-items: center;
-  width: 40%;
-  height: 15%;
+  width: 30%;
+  height: 30%;
   /* background: rgba(103, 98, 203, 0.343); */
-  font-size: 30px;
+  font-size: 40px;
 }
 #msgtex {
   align-items: center;
+  padding-top: 5%;
   font-size: 40px;
 }
 
 .asset {
-  height: 75%;
-  width: 30%;
-  right: 35%;
+  height: 100%;
+  width: 35%;
+  right: 32.5%;
   bottom: 85%;
   position: relative;
   /* bottom: 700px;
   left: 400px; */
   /* background: rgba(0, 156, 63, 1); */
+  font-size: 40px;
 }
 .track {
-  height: 75%;
-  width: 30%;
-  left: 35%;
-  bottom: 160%;
+  height: 100%;
+  width: 35%;
+  left: 32.5%;
+  bottom: 185%;
   position: relative;
   /* bottom: 700px;
   left: 400px; */
   /* background: rgb(63, 28, 128); */
+  font-size: 40px;
 }
 .layer2 {
   width: 70%;
@@ -166,7 +171,7 @@ button {
   width: 10%;
   height: 70%;
   /* margin: 0.5%; */
-  font-size: 22px;
+  font-size: 40px;
   position: relative;
   top: 10%;
   background-color: #84cbd3;
@@ -181,7 +186,6 @@ button {
 }
 button::before {
   /* content: "";
-  
   left: 0px;
   width: 100%;
   height: 100%; */
@@ -209,21 +213,21 @@ button:hover {
 
 input {
   margin-top: 1%;
-  width: 30%;
-  height: 10%;
-  font-size: 30px;
+  width: 50%;
+  height: 12%;
+  font-size: 40px;
   border-radius: 10px;
 }
 p {
-  width: 60%;
+  width: 100%;
   height: 10%;
-  font-size: 30px;
+  font-size: 35px;
 }
 table {
   border-collapse: collapse;
   /* margin: 0 auto; */
   text-align: center;
-  font-size: 30px;
+  font-size: 40px;
   width: 80%;
 }
 
@@ -607,7 +611,7 @@ export default {
               // bottom: auto,
               left: 'center',
               // data: ['MA5', 'MA10', 'MA20', 'MA30']
-              data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
+              data: ['Candlestick', 'MA5', 'MA10', 'MA20', 'MA30']
             },
             tooltip: {
               trigger: 'axis',
@@ -704,7 +708,8 @@ export default {
             ],
             series: [
               {
-                name: 'Dow-Jones index',
+                name: 'Candlestick',
+                // name: 'Dow-Jones index',
                 type: 'candlestick',
                 data: data0.values
                 // markPoint: {
