@@ -189,7 +189,7 @@ button {
   border-color: #ffffff;
 }
 #btn1 {
-  width: 15%;
+  width: 13%;
 }
 button::before {
   /* content: "";
