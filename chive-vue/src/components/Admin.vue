@@ -253,6 +253,8 @@ table tr:nth-child(even) {
 import axios from 'axios'
 // import util from '../util'
 
+axios.defaults.withCredentials = true
+
 export default {
   name: 'Admin',
   data () {
@@ -285,7 +287,8 @@ export default {
       var input = this.getInput()
       console.log('input: ', input)
 
-      var path = 'http://127.0.0.1:5000/track?stock_code=' + input[0]
+      // var path = 'http://127.0.0.1:5000/track?stock_code=' + input[0]
+      var path = 'track?stock_code=' + input[0]
       console.log('URL: ', path)
 
       axios
@@ -312,7 +315,8 @@ export default {
       var input = this.getInput()
       console.log('input: ', input)
 
-      var path = 'http://127.0.0.1:5000/track_cancel?stock_code=' + input[0]
+      // var path = 'http://127.0.0.1:5000/track_cancel?stock_code=' + input[0]
+      var path = 'track_cancel?stock_code=' + input[0]
       console.log('URL: ', path)
 
       axios
@@ -335,8 +339,8 @@ export default {
       this.getTrackList()
     },
     getTrackList () {
-      this.showtrack = true
-      var path = 'http://127.0.0.1:5000/track_list'
+      // var path = 'http://127.0.0.1:5000/track_list'
+      var path = 'track_list'
       console.log('URL: ', path)
       axios
         .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
@@ -370,12 +374,22 @@ export default {
       var input = this.getInput()
       console.log('input: ', input)
 
-      var path =
-        'http://127.0.0.1:5000/asset?acct=' + input[0] + '&pwd=' + input[1]
+      // var path =
+      //   'http://127.0.0.1:5000/asset?acct=' + input[0] + '&pwd=' + input[1]
+      var path = 'asset?acct=' + input[0] + '&pwd=' + input[1]
+
       console.log('URL: ', path)
 
       axios
-        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .get(path, {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+            // 'Access-Control-Allow-Headers': 'Content-Type,*',
+            // 'Access-Control-Allow-Credentials': true,
+            // 'Access-Control-Allow-Methods': 'POST,GET,OPTIONS,PUT,DELETE',
+            // 'Content-Type': 'application/json'
+          }
+        })
         .then(res => {
           if (res.data.data === null || res.data.data === undefined) {
             this.msgtext = 'Failed, Please Try Again!'
@@ -410,8 +424,17 @@ export default {
       var input = this.getInput()
       console.log('input: ', input)
 
+      // var path =
+      //   'http://127.0.0.1:5000/buy?acct=' +
+      //   input[0] +
+      //   '&pwd=' +
+      //   input[1] +
+      //   '&stock_code=' +
+      //   input[2] +
+      //   '&amount=' +
+      //   input[3]
       var path =
-        'http://127.0.0.1:5000/buy?acct=' +
+        'buy?acct=' +
         input[0] +
         '&pwd=' +
         input[1] +
@@ -444,8 +467,17 @@ export default {
       var input = this.getInput()
       console.log('input: ', input)
 
+      // var path =
+      //   'http://127.0.0.1:5000/sell?acct=' +
+      //   input[0] +
+      //   '&pwd=' +
+      //   input[1] +
+      //   '&stock_code=' +
+      //   input[2] +
+      //   '&amount=' +
+      //   input[3]
       var path =
-        'http://127.0.0.1:5000/sell?acct=' +
+        'sell?acct=' +
         input[0] +
         '&pwd=' +
         input[1] +
@@ -542,8 +574,15 @@ export default {
         )
         return
       }
+      // var path =
+      //   'http://127.0.0.1:5000/data?stock_code=' +
+      //   input[0] +
+      //   '&date_from=' +
+      //   input[1] +
+      //   '&date_to=' +
+      //   input[2]
       var path =
-        'http://127.0.0.1:5000/data?stock_code=' +
+        'data?stock_code=' +
         input[0] +
         '&date_from=' +
         input[1] +
@@ -787,7 +826,8 @@ export default {
         })
     },
     getData (cmd) {
-      var path = 'http://127.0.0.1:5000/test/get'
+      // var path = 'http://127.0.0.1:5000/test/get'
+      var path = 'test/get'
       if (cmd !== '') {
         path += '?arg=1'
       }

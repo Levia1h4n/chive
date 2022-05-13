@@ -179,7 +179,7 @@ def get_stock_data():
     finally:
         db.close()
 
-    ret = json.dumps({'data': db_ret})
+    ret = json.dumps({'msg': 'succ', 'data': db_ret})
     return Response(response=ret, status=200, mimetype='application/json')
 
 
@@ -196,8 +196,8 @@ def get_stock_data():
 #         print(request.args.get('ok'))
 #     return "<p>Hello, World!</p>"
 
-# CORS(app, supports_credentials=True)
-CORS(app, resources=r'/*')
+CORS(app, supports_credentials=True)
+# CORS(app, resources='/*')
 
 # @app.after_request
 # def cors(environ):
@@ -208,6 +208,7 @@ CORS(app, resources=r'/*')
 #     return environ
 
 
+@app.after_request
 def after_request(resp: Response) -> Response:
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Method'] = '*'
@@ -236,4 +237,4 @@ if __name__ == '__main__':
         print('track INIT ERROR')
         exit()
 
-    app.run()
+    app.run(port='5000')
