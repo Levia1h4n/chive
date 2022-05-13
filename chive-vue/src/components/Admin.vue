@@ -7,15 +7,13 @@
     <br />
     <!-- <span style="font-size = 200px">Quatitative Trading Platform</span> -->
     <div class="buttonSet">
-      <button id="btn1" class="button1" @click="getAsset()">
-        Personal Asset
-      </button>
+      <button id="btn1" @click="getAsset()">Personal Asset</button>
       <button @click="getBuy()">Buy</button>
       <button @click="getSell()">Sell</button>
       <button @click="getStockData()">Candlestick</button>
       <button @click="getPredict()">Predict</button>
       <button @click="getTrack()">Track</button>
-      <button @click="getTrackCancel()">Track Cancel</button>
+      <button id="btn1" @click="getTrackCancel()">Track Cancel</button>
       <button @click="getTrackList()">Track List</button>
     </div>
     <div class="layer1">
@@ -120,14 +118,14 @@
   width: 70%;
   height: 30%;
   /* background: rgba(177, 69, 69, 0.2); */
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .inputArea {
   width: 30%;
   height: 70%;
   /* background: rgba(0, 0, 0, 0.2); */
-  font-size: 25px;
+  font-size: 20px;
 }
 .msgArea,
 .predictArea {
@@ -135,13 +133,13 @@
   width: 30%;
   height: 15%;
   /* background: rgba(103, 98, 203, 0.343); */
-  font-size: 25px;
+  font-size: 20px;
 }
 #msgtex,
 #predicttex {
   align-items: center;
   padding-top: 2%;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .asset {
@@ -153,7 +151,7 @@
   /* bottom: 700px;
   left: 400px; */
   /* background: rgba(0, 156, 63, 1); */
-  font-size: 25px;
+  font-size: 20px;
 }
 .track {
   height: 100%;
@@ -164,7 +162,7 @@
   /* bottom: 700px;
   left: 400px; */
   /* background: rgb(63, 28, 128); */
-  font-size: 25px;
+  font-size: 20px;
 }
 .layer2 {
   width: 70%;
@@ -181,7 +179,7 @@ button {
   width: 10%;
   height: 70%;
   /* margin: 0.5%; */
-  font-size: 25px;
+  font-size: 20px;
   position: relative;
   top: 10%;
   background-color: #84cbd3;
@@ -192,7 +190,7 @@ button {
   border-color: #ffffff;
 }
 #btn1 {
-  width: 10%;
+  width: 15%;
 }
 button::before {
   /* content: "";
@@ -225,19 +223,19 @@ input {
   margin-top: 1%;
   width: 50%;
   height: 12%;
-  font-size: 25px;
+  font-size: 20px;
   border-radius: 10px;
 }
 p {
   width: 100%;
   height: 10%;
-  font-size: 25px;
+  font-size: 20px;
 }
 table {
   border-collapse: collapse;
   /* margin: 0 auto; */
   text-align: center;
-  font-size: 25px;
+  font-size: 20px;
   width: 80%;
 }
 
