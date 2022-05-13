@@ -1,8 +1,6 @@
 <template>
   <div class="web">
-    <span class="title" style="font-size: 50px"
-      >Quatitative Trading Platform</span
-    >
+    <span class="title" style="font-size: 50px">Chive</span>
     <br />
     <br />
     <!-- <span style="font-size = 200px">Quatitative Trading Platform</span> -->
@@ -15,6 +13,7 @@
       <button @click="getTrack()">Track</button>
       <button id="btn1" @click="getTrackCancel()">Track Cancel</button>
       <button @click="getTrackList()">Track List</button>
+      <button @click="getData()">TestCROS</button>
     </div>
     <div class="layer1">
       <div class="inputArea">
@@ -872,8 +871,8 @@ export default {
         })
     },
     getData (cmd) {
-      // var path = 'http://127.0.0.1:5000/test/get'
-      var path = 'test/get'
+      var path = 'http://127.0.0.1:5000/test/get'
+      // var path = 'test/get'
       if (cmd !== '') {
         path += '?arg=1'
       }
