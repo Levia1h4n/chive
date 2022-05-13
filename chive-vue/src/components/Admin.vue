@@ -10,11 +10,12 @@
       <button id="btn1" class="button1" @click="getAsset()">
         Personal Asset
       </button>
-      <button class="button1" @click="getBuy()">Buy</button>
+      <button @click="getBuy()">Buy</button>
       <button @click="getSell()">Sell</button>
-      <button id="btn1" @click="getStockData()">Candlestick</button>
+      <button @click="getStockData()">Candlestick</button>
+      <button @click="getPredict()">Predict</button>
       <button @click="getTrack()">Track</button>
-      <button id="btn1" @click="getTrackCancel()">Track Cancel</button>
+      <button @click="getTrackCancel()">Track Cancel</button>
       <button @click="getTrackList()">Track List</button>
     </div>
     <div class="layer1">
@@ -31,6 +32,13 @@
 
       <div class="msgArea">
         <p id="msgtex">{{ msgtext }}</p>
+      </div>
+
+      <div class="predictArea">
+        <p v-if="showpredict" id="predicttex">
+          Date: {{ predict.date }} &nbsp;&nbsp; Rising Rate:
+          {{ (Number(predict.rate) * 100).toFixed(3) }}%
+        </p>
       </div>
 
       <div class="asset">
@@ -112,49 +120,51 @@
   width: 70%;
   height: 30%;
   /* background: rgba(177, 69, 69, 0.2); */
-  font-size: 40px;
+  font-size: 25px;
 }
 
 .inputArea {
   width: 30%;
   height: 70%;
   /* background: rgba(0, 0, 0, 0.2); */
-  font-size: 40px;
+  font-size: 25px;
 }
-.msgArea {
+.msgArea,
+.predictArea {
   align-items: center;
   width: 30%;
-  height: 30%;
+  height: 15%;
   /* background: rgba(103, 98, 203, 0.343); */
-  font-size: 40px;
+  font-size: 25px;
 }
-#msgtex {
+#msgtex,
+#predicttex {
   align-items: center;
-  padding-top: 5%;
-  font-size: 40px;
+  padding-top: 2%;
+  font-size: 25px;
 }
 
 .asset {
   height: 100%;
   width: 35%;
   right: 32.5%;
-  bottom: 85%;
+  bottom: 100%;
   position: relative;
   /* bottom: 700px;
   left: 400px; */
   /* background: rgba(0, 156, 63, 1); */
-  font-size: 40px;
+  font-size: 25px;
 }
 .track {
   height: 100%;
   width: 35%;
   left: 32.5%;
-  bottom: 185%;
+  bottom: 200%;
   position: relative;
   /* bottom: 700px;
   left: 400px; */
   /* background: rgb(63, 28, 128); */
-  font-size: 40px;
+  font-size: 25px;
 }
 .layer2 {
   width: 70%;
@@ -171,7 +181,7 @@ button {
   width: 10%;
   height: 70%;
   /* margin: 0.5%; */
-  font-size: 40px;
+  font-size: 25px;
   position: relative;
   top: 10%;
   background-color: #84cbd3;
@@ -182,7 +192,7 @@ button {
   border-color: #ffffff;
 }
 #btn1 {
-  width: 18%;
+  width: 10%;
 }
 button::before {
   /* content: "";
@@ -215,19 +225,19 @@ input {
   margin-top: 1%;
   width: 50%;
   height: 12%;
-  font-size: 40px;
+  font-size: 25px;
   border-radius: 10px;
 }
 p {
   width: 100%;
   height: 10%;
-  font-size: 35px;
+  font-size: 25px;
 }
 table {
   border-collapse: collapse;
   /* margin: 0 auto; */
   text-align: center;
-  font-size: 40px;
+  font-size: 25px;
   width: 80%;
 }
 
@@ -270,6 +280,7 @@ export default {
       assetrecords: [],
       trackrecords: [],
       msgtext: null,
+      predict: [],
       charts: null,
       // r: null,
       // msg: null,
@@ -279,14 +290,40 @@ export default {
       },
       showchart: false,
       showrecord: false,
-      showtrack: false
+      showtrack: false,
+      showpredict: false
     }
   },
   methods: {
     getInput () {
       return [this.arg1, this.arg2, this.arg3, this.arg4]
     },
+    getPredict () {
+      this.showpredict = true
+      var input = this.getInput()
+      var path = 'predict?stock_code=' + input[0]
+      console.log('URL: ', path)
+
+      axios
+        .get(path, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .then(res => {
+          var data = res.data.data
+          console.log('data: ', data)
+          this.predict = data
+          // TODO
+          var msg = res.data.msg
+          if (msg === 'succ') {
+            this.msgtext = 'Successful!'
+          } else {
+            this.msgtext = 'Failed, Please Try Again!'
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
     getTrack () {
+      this.showpredict = false
       this.showtrack = true
       var input = this.getInput()
       console.log('input: ', input)
@@ -315,6 +352,7 @@ export default {
       this.getTrackList()
     },
     getTrackCancel () {
+      this.showpredict = false
       this.showtrack = true
       var input = this.getInput()
       console.log('input: ', input)
@@ -343,6 +381,8 @@ export default {
       this.getTrackList()
     },
     getTrackList () {
+      this.showpredict = false
+      this.showtrack = true
       // var path = 'http://127.0.0.1:5000/track_list'
       var path = 'track_list'
       console.log('URL: ', path)
@@ -374,6 +414,7 @@ export default {
         })
     },
     getAsset () {
+      this.showpredict = false
       this.showrecord = true
       var input = this.getInput()
       console.log('input: ', input)
@@ -424,6 +465,7 @@ export default {
         })
     },
     getBuy () {
+      this.showpredict = false
       this.showrecord = true
       var input = this.getInput()
       console.log('input: ', input)
@@ -467,6 +509,7 @@ export default {
       this.getAsset()
     },
     getSell () {
+      this.showpredict = false
       this.showrecord = true
       var input = this.getInput()
       console.log('input: ', input)
